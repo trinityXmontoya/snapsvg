@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="../../dist/snap.svg.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script>
+    $(document).ready( function(){
+      var s = Snap(1000,400);
+      var beginning = s.circle(40,130,20).attr({id: "beginning", fill: "green"})
+      var end = s.circle(440,130,20).attr({id: "beginning", fill: "orange"})
+      var weftShip = s.rect(50,120,40, 15, 5).attr({display: "none", fill: "blue"})
+      var slowShip = s.rect(50,135,40, 15, 5).attr({display: "none", fill: "red"})
+      var slowPath = s.path().attr({
+        fill: "none",
+        stroke: "orange",
+        strokeWidth: 3
+      }).insertBefore(slowShip);
+      var weftPath = s.path().attr({
+        fill: "none",
+        stroke: "blue",
+        strokeWidth: 3
+      }).insertBefore(weftShip)
+      // var pth = s.path().attr({
+      //   fill:"none",
+      //   stroke:"#000000",
+      //   display: "none"
+      // });
+
+      $('circle#beginning').on('click', function () {
+        weftShip.attr({display: ""})
+        // slowShip.attr({display: ""})
+        var flag,
+          // slowLen = Snap.path.getTotalLength(slowPath.attr("d"));
+          weftLen = Snap.path.getTotalLength(pth.attr("d"))
+        Snap.animate(0, weftLen, function (l) {
+          // Safari bug workaround: forcing redraw
+          s.attr({width: 100 + (flag = !flag ? 1e-5 : 0) + "%"});
+          //
+          var dot = weftPath.getPointAtLength(l);
+          console.log(dot)
+          weftPath.attr({
+            d: weftPath.getSubpath(0, l)
+          });
+          weftShip.attr({
+            transform: "t" + [dot.x, dot.y]
+          });
+          // gr.attr({
+          //     transform: getShift(dot)
+          // });
+        }, 1000);
+      });
+    })
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
